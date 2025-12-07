@@ -1,0 +1,20 @@
+# 核心依赖
+streamlit>=1.28.0
+pandas>=2.0.0
+openpyxl>=3.1.0  # Excel 文件支持
+requests>=2.31.0  # HTTP 请求（连接 Ollama）
+
+# 向量化与检索
+faiss-cpu>=1.7.4  # 向量索引（Mac 使用 CPU 版本）
+# 如果需要 GPU 版本：faiss-gpu>=1.7.4
+sentence-transformers>=2.2.0  # Embedding 模型封装
+transformers>=4.35.0
+
+# 数据处理
+jsonlines>=4.0.0
+numpy>=1.24.0
+
+# 工具库
+python-dotenv>=1.0.0  # 环境变量管理
+tqdm>=4.66.0  # 进度条
+

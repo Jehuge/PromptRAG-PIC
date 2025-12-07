@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# 注意: venv/ 目录已忽略，但建议保留虚拟环境
+# 如需提交，可以移除 venv/ 这一行
+
+# 数据文件
+# data/
+# db/
+# *.index
+# *.jsonl
+# *.json
+# *.xlsx
+# *.csv
+
+# 模型文件
+models/
+
+# 环境变量
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Streamlit
+.streamlit/
+
+# 系统文件
+.DS_Store
+Thumbs.db
