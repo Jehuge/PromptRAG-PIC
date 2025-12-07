@@ -18,6 +18,11 @@ MODEL_CACHE_DIR = os.path.join(os.getcwd(), "models")  # 模型下载缓存目�
 # Ollama 保活配置（降低 TTFT）
 OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "5m")  # 示例：30m、2h；设置为 "0" 关闭保活
 
+# Gemini API 配置
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+# 默认使用 1.5-flash (速度快/免费额度高)，也可改为 gemini-1.5-pro
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3-pro-preview")
+
 # 数据路径配置
 DATA_DIR = "data"
 RAW_DATA_DIR = os.path.join(DATA_DIR, "raw")  # 存放原始 Excel/CSV
