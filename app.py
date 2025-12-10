@@ -3,6 +3,7 @@ Streamlit 用户界面：Prompt 助手 (Professional Clean Design)
 """
 import streamlit as st
 import time
+import re
 from ollama_client import OllamaClient
 from gemini_client import GeminiClient
 from vector_store import VectorStore
@@ -207,6 +208,17 @@ if 'gemini_client' not in st.session_state:
 if 'current_style' not in st.session_state:
     st.session_state.current_style = "generic" # 默认风格
 
+
+def strip_think_tags(text: str) -> str:
+    """
+    去除模型输出中的 <think>...</think> 片段，避免展示思考内容。
+    使用 DOTALL 以跨行匹配。
+    """
+    if not text:
+        return text
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+
+
 def init_components():
     """初始化组件"""
     if st.session_state.ollama_client is None:
@@ -407,7 +419,7 @@ def main():
         with col_res:
             st.markdown("**✨ AI 生成结果**")
             res_box = st.empty()
-            full_text = ""
+            raw_text = ""
             
             if top_k == 0 or not results:
                 # 无参考模式
@@ -426,15 +438,17 @@ def main():
                     prompt=prompt,
                     system=st.session_state.rag_generator.system_prompt
                 ):
-                    full_text += token
-                    res_box.markdown(f'<div class="output-box"><div class="output-label">STREAMING</div>{full_text}▋</div>', unsafe_allow_html=True)
+                    raw_text += token
+                    clean_text = strip_think_tags(raw_text)
+                    res_box.markdown(f'<div class="output-box"><div class="output-label">STREAMING</div>{clean_text}▋</div>', unsafe_allow_html=True)
                 
                 # 完成显示
-                res_box.markdown(f'<div class="output-box"><div class="output-label">DONE</div>{full_text}</div>', unsafe_allow_html=True)
+                final_text = strip_think_tags(raw_text)
+                res_box.markdown(f'<div class="output-box"><div class="output-label">DONE</div>{final_text}</div>', unsafe_allow_html=True)
                 
                 # 复制工具
                 st.caption("Prompt 文本:")
-                st.code(full_text, language="text")
+                st.code(final_text, language="text")
                 
             except Exception as e:
                 st.error(f"生成错误: {str(e)}")

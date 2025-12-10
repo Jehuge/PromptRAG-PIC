@@ -2,6 +2,7 @@
 配置文件：管理 Ollama 服务端连接信息和其他系统参数
 """
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,7 +14,13 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:32b")  # 根据实际模型名
 # Embedding 模型配置（运行在 Mac 端）
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")  # 多语言支持好
 # 备选：EMBEDDING_MODEL = "sentence-transformers/clip-ViT-B-32"  # 图像语义对齐
-MODEL_CACHE_DIR = os.path.join(os.getcwd(), "models")  # 模型下载缓存目录
+
+# 使用项目根目录下的固定 models 目录，避免切换工作目录导致重复下载
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_CACHE_DIR = str(BASE_DIR / "models")
+
+# 离线模式开关：设置为 "1" 时仅使用本地文件，不访问网络
+LOCAL_FILES_ONLY = os.getenv("LOCAL_FILES_ONLY", "0") == "1"
 
 # Ollama 保活配置（降低 TTFT）
 OLLAMA_KEEP_ALIVE = os.getenv("OLLAMA_KEEP_ALIVE", "5m")  # 示例：30m、2h；设置为 "0" 关闭保活

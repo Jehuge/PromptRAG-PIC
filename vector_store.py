@@ -9,7 +9,13 @@ import faiss
 import difflib
 from sentence_transformers import SentenceTransformer
 from typing import List, Dict, Tuple
-from config import EMBEDDING_MODEL, INDEX_PATH, METADATA_PATH, MODEL_CACHE_DIR
+from config import (
+    EMBEDDING_MODEL,
+    INDEX_PATH,
+    METADATA_PATH,
+    MODEL_CACHE_DIR,
+    LOCAL_FILES_ONLY,
+)
 
 
 class VectorStore:
@@ -41,8 +47,12 @@ class VectorStore:
                 print("提示: 正在加载模型...")
             
             try:
-                # 指定 cache_folder 为项目目录下的 models
-                encoder = SentenceTransformer(self.model_name, cache_folder=MODEL_CACHE_DIR)
+                # 指定 cache_folder 为项目目录下的 models，必要时开启本地离线加载
+                encoder = SentenceTransformer(
+                    self.model_name,
+                    cache_folder=MODEL_CACHE_DIR,
+                    local_files_only=LOCAL_FILES_ONLY,
+                )
                 # 获取实际向量维度
                 test_embedding = encoder.encode(["test"])
                 dimension = test_embedding.shape[1]
